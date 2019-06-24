@@ -1,5 +1,5 @@
 {
-  "name": "get_in",
+  "name": "js_deep",
   "bsc-flags": "-g",
   "ocaml-flags": ["-g", "-bin-annot"],
   "warnings": {
@@ -13,7 +13,7 @@
   "public": ["Main"],
   "entries": [{
     "backend": "native",
-    "main-module": "Get_in"
+    "main-module": "Js_deep"
   }],
   "refmt": 3
 }

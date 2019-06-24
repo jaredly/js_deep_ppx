@@ -1,19 +1,19 @@
 {
-  "name": "get_in_ppx",
-  "version": "1.0.2",
+  "name": "js_deep_ppx",
+  "version": "1.0.0",
   "scripts": {
-    "postinstall": "bsb -make-world -backend native; cp lib/bs/native/get_in.native ./ppx",
+    "postinstall": "bsb -make-world -backend native; cp lib/bs/native/js_deep.native ./ppx",
     "clean": "bsb -clean-world"
   },
   "keywords": [
     "Reason",
-    "Graphql"
+    "Bucklescript"
   ],
   "repository": {
-    "url": "jaredly/get_in_ppx",
+    "url": "jaredly/js_deep_ppx",
     "type": "git"
   },
-  "description": "get_in ppx for option chaining in reason",
+  "description": "js_deep ppx for deep object manipulation and cloning in reason",
   "author": "Jared Forsyth",
   "license": "ISC",
   "dependencies": {
