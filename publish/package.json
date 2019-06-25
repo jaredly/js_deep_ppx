@@ -16,6 +16,7 @@
   "description": "js_deep ppx for deep object manipulation and cloning in reason",
   "author": "Jared Forsyth",
   "license": "ISC",
+  "readme": "../Readme.md",
   "dependencies": {
     "bs-platform": "bsansouci/bsb-native#3.2.0"
   }
