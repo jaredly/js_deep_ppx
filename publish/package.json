@@ -1,6 +1,6 @@
 {
   "name": "js_deep_ppx",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.2",
   "scripts": {
     "postinstall": "bsb -make-world -backend native; cp lib/bs/native/js_deep.native ./ppx",
     "clean": "bsb -clean-world"
