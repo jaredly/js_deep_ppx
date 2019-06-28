@@ -16,6 +16,9 @@ let two = [%js.deep one["one"]["two"]["five"].replace(5)];
 let two = [%js.deep one["one"]["three"]["five"].replace(5)];
 */
 
+let thing = {"Uppercase": 5};
+let more = 2 + [%js.deep thing["Uppercase"]];
+
 assert(two == {"one": {"two": {"three": 5}}});
 Js.log2("ok!", two)
 

@@ -158,26 +158,37 @@ let get_mapper = {
           transform([%e core], [%e arg])
         }]
       }
-      | Pexp_apply({pexp_loc, pexp_desc: Pexp_ident({txt: Lident("#??")})}, [("", arg), ("", name)]) =>
-        switch (name.pexp_desc) {
-          | Pexp_ident({txt: Lident(_)}) => [%expr switch ([%e mapper.expr(mapper, arg)]) {
-            | None => None
-            | Some(arg) => arg##[%e name]
-          }]
-          | _ => fail(pexp_loc, "#? must have a literal string after it")
-        }
-      | Pexp_apply({pexp_loc, pexp_desc: Pexp_ident({txt: Lident("#?")})}, [("", arg), ("", name)]) =>
-        switch (name.pexp_desc) {
-          | Pexp_ident({txt: Lident(_)}) => [%expr switch ([%e mapper.expr(mapper, arg)]) {
-            | None => None
-            | Some(arg) => Some(arg##[%e name])
-          }]
-          | _ => fail(pexp_loc, "#? must have a literal string after it")
-        }
       | _ => Ast_mapper.default_mapper.expr(mapper, expr)
     }
   }
 };
+
+let string_get_mapper = {
+  ...Ast_mapper.default_mapper,
+  expr: (mapper, expr) => {
+    switch (expr.pexp_desc) {
+      | Pexp_apply(
+                    {
+                      pexp_loc: get_loc,
+                      pexp_desc: Pexp_ident({txt: Ldot(Lident("Array"), "get")}),
+                    },
+                    [
+                      ("", base),
+                      (
+                        "",
+                        {
+                          pexp_desc: Pexp_constant(Asttypes.Const_string(attr, None)),
+                          pexp_loc: attr_loc,
+                        },
+                      ),
+                    ],
+                  ) => {
+        js_getter(base, [Location.mkloc(attr, attr_loc)])
+      }
+      | _ => Ast_mapper.default_mapper.expr(mapper, expr)
+    }
+  }
+}
 
 let mapper = _argv =>
   Parsetree.{
@@ -186,7 +197,8 @@ let mapper = _argv =>
     expr: (mapper, expr) =>
       switch expr.pexp_desc {
       | Pexp_extension(({txt: "js.deep", loc}, PStr([{pstr_desc: Pstr_eval(expr, attributes)}]))) => {
-        get_mapper.expr(get_mapper, expr)
+        /* first do the deep stuff, then do the ["thing"] => ##thing mapping */
+        string_get_mapper.expr(string_get_mapper, get_mapper.expr(get_mapper, expr))
       }
       | _ => Ast_mapper.default_mapper.expr(mapper, expr)
       }
